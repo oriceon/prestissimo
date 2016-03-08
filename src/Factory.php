@@ -100,7 +100,6 @@ final class Factory
     public static function getPreEvent(Aspects\HttpGetRequest $req)
     {
         $pre = new Aspects\JoinPoint('pre-download', $req);
-        $pre->attach(static::getAspectAuth());
         $pre->attach(new Aspects\AspectRedirect);
         $pre->attach(new Aspects\AspectProxy);
         return $pre;
@@ -112,16 +111,6 @@ final class Factory
     public static function getPostEvent(Aspects\HttpGetRequest $req)
     {
         $post = new Aspects\JoinPoint('post-download', $req);
-        $post->attach(static::getAspectAuth());
         return $post;
-    }
-
-    /**
-     * @return Aspects\AspectAuth (same instance)
-     */
-    public static function getAspectAuth()
-    {
-        static $auth;
-        return $auth ?: $auth = new Aspects\AspectAuth;
     }
 }
