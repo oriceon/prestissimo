@@ -32,20 +32,6 @@ class AspectAuth implements SplObserver
             $req->username = $req->password = null;
             return;
         }
-
-        if ($req instanceof GitHubRequest && $req->password === 'x-oauth-basic') {
-            $req->query['access_token'] = $req->username;
-            // forbid basic-auth
-            $req->username = $req->password = null;
-            return;
-        }
-
-        if ($req instanceof GitLabRequest && $req->password === 'oauth2') {
-            $req->headers[] = 'Authorization: Bearer ' . $req->username;
-            // forbid basic-auth
-            $req->username = $req->password = null;
-            return;
-        }
     }
 
     private function after(HttpGetResponse $res)

@@ -117,9 +117,8 @@ class HttpGetRequest
             CURLOPT_ENCODING => 'gzip',
             CURLOPT_HTTPHEADER => $this->headers,
             CURLOPT_USERAGENT => $this->genUA(),
+            CURLOPT_VERBOSE => (bool)$this->verbose,
         );
-
-        $curlOpts[CURLOPT_VERBOSE] = (bool)$this->verbose;
 
         if ($this->username && $this->password) {
             $curlOpts[CURLOPT_USERPWD] = "$this->username:$this->password";
