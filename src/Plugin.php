@@ -41,7 +41,6 @@ class Plugin implements
         'Aspects\JoinPoint',
         'Config',
         'CurlMulti',
-        'CurlRemoteFilesystem',
         'Factory',
         'FileDownloaderDummy',
         'OutputFile',
@@ -78,25 +77,6 @@ class Plugin implements
                 array('onPostDependenciesSolving', PHP_INT_MAX),
             ),
         );
-    }
-
-    public function onPreFileDownload(CPlugin\PreFileDownloadEvent $ev)
-    {
-        if ($this->disabled) {
-            return;
-        }
-        $scheme = parse_url($ev->getProcessedUrl(), PHP_URL_SCHEME);
-        if ($scheme === 'http' || $scheme === 'https') {
-            $rfs = $ev->getRemoteFilesystem();
-
-            $curlrfs = new CurlRemoteFilesystem(
-                $this->io,
-                $this->config,
-                $rfs->getOptions()
-            );
-            $curlrfs->setPluginConfig($this->pluginConfig->get());
-            $ev->setRemoteFilesystem($curlrfs);
-        }
     }
 
     /**
