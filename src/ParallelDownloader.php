@@ -45,7 +45,7 @@ class ParallelDownloader
 
         $this->totalCnt = count($packages);
         $this->successCnt = $this->skippedCnt = $this->failureCnt = 0;
-        $this->io->write("    Prefetch start: <comment>total: $this->totalCnt</comment>");
+        $this->io->writeError("    Prefetch start: <comment>total: $this->totalCnt</comment>");
 
         $multi->setTargets($this->filterPackages($packages, $pluginConfig));
 
@@ -57,11 +57,11 @@ class ParallelDownloader
             $this->successCnt += $result['successCnt'];
             $this->failureCnt += $result['failureCnt'];
             foreach ($result['results'] as $url) {
-                $this->io->write($this->makeDownloadingText($url));
+                $this->io->writeError($this->makeDownloadingText($url));
             }
         } while ($multi->remain());
 
-        $this->io->write(
+        $this->io->writeError(
             "    Finished: <comment>success:$this->successCnt,"
             . " skipped:$this->skippedCnt, failure:$this->failureCnt,"
             . " total: $this->totalCnt</comment>"
@@ -125,8 +125,12 @@ class ParallelDownloader
      */
     private function makeDownloadingText($url)
     {
-        $request = new Aspects\HttpGetRequest('example.com', $url, $this->io);
-        $request->query = array();
-        return "    <comment>$this->successCnt/$this->totalCnt</comment>:    {$request->getURL()}";
+        // strip credentials
+        $struct = parse_url($url);
+        $url = $struct['scheme'] . '://';
+        $url .= $struct['host'];
+        $url .= isset($struct['port']) ? ":$struct[port]" : '';
+        $url .= isset($struct['path']) ? $struct['path'] : '';
+        return "    <comment>$this->successCnt/$this->totalCnt</comment>:    $url";
     }
 }
