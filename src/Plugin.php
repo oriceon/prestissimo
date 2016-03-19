@@ -68,9 +68,6 @@ class Plugin implements
     public static function getSubscribedEvents()
     {
         return array(
-            CPlugin\PluginEvents::PRE_FILE_DOWNLOAD => array(
-                array('onPreFileDownload', 0),
-            ),
             Installer\InstallerEvents::POST_DEPENDENCIES_SOLVING => array(
                 array('onPostDependenciesSolving', PHP_INT_MAX),
             ),
