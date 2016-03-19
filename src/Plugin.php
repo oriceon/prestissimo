@@ -32,7 +32,6 @@ class Plugin implements
 
     private static $pluginClasses = array(
         'Aspects\AspectProxy',
-        'Aspects\AspectRedirect',
         'Aspects\GitHubRequest',
         'Aspects\GitLabRequest',
         'Aspects\HttpGetRequest',

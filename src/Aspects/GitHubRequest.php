@@ -18,6 +18,13 @@ class GitHubRequest extends HttpGetRequest
 
     public function __construct($origin, $url, IO\IOInterface $io)
     {
+        if (preg_match('%^https://api\.github\.com/repos(/[^/]+/[^/]+/)zipball/%', $url, $m)) {
+            $url = str_replace(
+                "api.github.com/repos$m[1]zipball",
+                "codeload.github.com$m[1]legacy.zip",
+                $url
+            );
+        }
         parent::__construct($origin, $url, $io);
         if ($this->password === 'x-oauth-basic') {
             $this->query['access_token'] = $this->username;
