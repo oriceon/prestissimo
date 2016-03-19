@@ -17,45 +17,6 @@ use Composer\Config as CConfig;
 final class Factory
 {
     /**
-     * not need Authorization
-     * @var array {
-     *  'origin.example.com' => x
-     * }
-     */
-    private static $connections = array();
-
-    /**
-     * need Authorization header
-     * @var array {
-     *  'origin.example.com' => x
-     * }
-     */
-    private static $authConnections = array();
-
-    /**
-     * get cached curl handler
-     * @param string $origin
-     * @param bool $auth
-     * @return resource<curl>
-     */
-    public static function getConnection($origin, $auth = false)
-    {
-        if ($auth) {
-            if (isset(self::$authConnections[$origin])) {
-                return self::$authConnections[$origin];
-            }
-
-            return self::$authConnections[$origin] = curl_init();
-        } else {
-            if (isset(self::$connections[$origin])) {
-                return self::$connections[$origin];
-            }
-
-            return self::$connections[$origin] = curl_init();
-        }
-    }
-
-    /**
      * @param string $origin domain text
      * @param string $url
      * @param IO\IOInterface $io
